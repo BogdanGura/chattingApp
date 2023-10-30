@@ -9,9 +9,13 @@ if(isset($_POST['user_name']) && isset($_POST['password']))
     $user_name = $_POST["user_name"];
     $password = $_POST["password"];
 
+    //Validation booleans
+    $user_name_valid = false;
+    $password_valid = false;
+
     //sanitize input
-    $user_name = sanitize($user_name);
-    $password = sanitize($password);
+    $_POST["user_name"] = sanitize($user_name);
+    $_POST["password"] = sanitize($password);
 
     //Connect to the database and validate the input.
     //Then check if that account exist and if it does redirect user
@@ -48,12 +52,7 @@ if(isset($_POST['user_name']) && isset($_POST['password']))
             if($user_name_result->num_rows > 0)
             {
                 echo "Username matches your records <br>";
-
-                //Save the username and password and redirect them to the index page
-                //$_SESSION["user_name"] = $user_name;
-                //$_SESSION["password"] = $password;
-
-                //header("Location: /index.php");
+                $user_name_valid = true;
             }
             else{
                 echo "Your Username Did NOT match your records <br>";
@@ -63,29 +62,37 @@ if(isset($_POST['user_name']) && isset($_POST['password']))
             //$hash_result = password_verify($password, $password_result);
             //echo $hash_result;
 
-            if($user_name_result->num_rows > 0)
-            {
-                //First we fetch a row from the sql object
+            if ($user_name_result->num_rows > 0) {
+                // First, fetch a row from the SQL result
                 $password_row = mysqli_fetch_array($password_result);
-
-                //Then we check each item for your passsword
-                //if it matches it valid
-                for ($i = 0; $i < count($password_row); $i++) 
-                { 
-                    //Checking if index exists first
-                    if(empty($i))
+            
+                // Then iterate through the elements in the $password_row array
+                foreach ($password_row as $stored_password) 
+                {
+                    $password = $_POST["password"];
+                    $hash_result = password_verify($password, $stored_password);
+                    echo "Entered Password: " . $password . "<br>";
+                    echo "Database password: " . $stored_password . "<br>";
+                    if ($hash_result) 
                     {
-                        $hash_result = password_verify($password, $password_row[$i]);
-                        echo "Entered Password: " . $password . "<br>";
-                        echo "Database password: " .  $password_row[$i] . "<br>";
-                        if($hash_result)
-                        {
-                            echo "Password matches your records <br>";
-                        }
-                        else{
-                            echo "Password did NOT match your records <br>";
-                        }
+                        echo "Password matches your records <br>";
+                        $password_valid = true;
+                        break; // Exit the loop since we found a match
+                    } else 
+                    {
+                        echo "Password did NOT match your records <br>";
                     }
+                }
+                
+                // Confirming validation and redirecting the user
+                if ($user_name_valid && $password_valid) {
+                    // Close the database connection
+                    $connection->close();
+                    // Save the username and password and redirect them to the index page
+                    $_SESSION["user_name"] = $user_name;
+                    $_SESSION["password"] = $password;
+            
+                    header("Location: /index.php");
                 }
             }
         }
