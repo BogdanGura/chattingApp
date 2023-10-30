@@ -30,5 +30,6 @@ else{
 </head>
 <body>
     <h1>Welcome, <?php echo $username; ?></h1>
+    <a href="/chatting-app/logout.php">Log Out</a>
 </body>
 </html>
