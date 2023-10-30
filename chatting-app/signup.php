@@ -7,13 +7,13 @@ session_start();
 if(isset($_POST['user_name']) && isset($_POST['password'])
    && isset($_POST['email']))
 {
-    //Removing any whitespaces from the passed data
-    $user_name = sanitize($user_name);
-    $password = sanitize($password);
-    $email = sanitize($email);
     // checking if username is long enogh 
     // and then removing any html from it
     //sanitize is a function from functions.php
+    $user_name = $_POST["user_name"];
+    $password = $_POST["password"];
+    $email = $_POST["email"];
+
     if(strlen($user_name) < 5)
     {
         echo("Username that you entered is too short. Valid usernames are atleast 5 
@@ -36,6 +36,13 @@ if(isset($_POST['user_name']) && isset($_POST['password'])
         echo("Password that you entered is too long. Valid passwords can't be longer than 20 characters
             or shorter than 5 characters <br>");
     }
+
+    //Removing any whitespaces from the passed data
+    $user_name = sanitize($user_name);
+
+    $password = sanitize($password);
+
+    $email = sanitize($email);
     
     //Checking if password and user_name
     //got validated
@@ -94,15 +101,16 @@ if(isset($_POST['user_name']) && isset($_POST['password'])
                     //Now that user_name is valid and not taken
                     // we can finally input everithing into a database
 
-                    //First, hash the password
-                    echo gettype($password);
-                    echo gettype($user_name);
-                    $password = password_hash($password, PASSWORD_BCRYPT);
+
+                    $password = $_POST["password"];
+                    $password_hashed = password_hash($password, PASSWORD_BCRYPT);
+                    echo $password_hashed;
 
                     //Query that will insert all the data into the database
-                    $insert_user_password_email_query = "INSERT INTO users (user_name, password, email) VALUES ('$user_name', '$password', '$email')";
+                    $insert_user_password_email_query = "INSERT INTO users (user_name, password, email) VALUES ('$user_name', '$password_hashed', '$email')";
 
                     $insertion_result = $connection->query($insert_user_password_email_query);
+
                     //Run the query
                     if($insertion_result)
                     {
@@ -124,9 +132,6 @@ if(isset($_POST['user_name']) && isset($_POST['password'])
            }
         }
     }
-}
-else{
-    echo "Fields are empty";
 }
 
 ?>
