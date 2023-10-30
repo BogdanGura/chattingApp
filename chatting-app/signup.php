@@ -8,9 +8,9 @@ if(isset($_POST['user_name']) && isset($_POST['password'])
    && isset($_POST['email']))
 {
     //Removing any whitespaces from the passed data
-    $user_name = trim($_POST["user_name"]);
-    $password = trim($_POST["password"]);
-    $email = trim($_POST["email"]);
+    $user_name = sanitize($user_name);
+    $password = sanitize($password);
+    $email = sanitize($email);
     // checking if username is long enogh 
     // and then removing any html from it
     //sanitize is a function from functions.php
@@ -24,9 +24,6 @@ if(isset($_POST['user_name']) && isset($_POST['password'])
         echo("Username that you entered is too long. Valid usernames can't be longer than 20 characters
             or shorter than 5 characters <br>");
     }
-    else{
-        $user_name = sanitize($user_name);
-    }
 
     //Validating the password
     if(strlen($password) < 5)
@@ -38,9 +35,6 @@ if(isset($_POST['user_name']) && isset($_POST['password'])
     {
         echo("Password that you entered is too long. Valid passwords can't be longer than 20 characters
             or shorter than 5 characters <br>");
-    }
-    else{
-        $password = sanitize($password);
     }
     
     //Checking if password and user_name
@@ -54,11 +48,11 @@ if(isset($_POST['user_name']) && isset($_POST['password'])
 
         $server = "localhost"; 
         $username = "root"; 
-        $password = ""; 
+        $passwordDB = ""; 
         $database = "chatting_app";
 
         // Create a connection
-        $connection = new mysqli($server, $username, $password, $database);
+        $connection = new mysqli($server, $username, $passwordDB, $database);
 
         // Check if the connection was successful
         if ($connection->connect_error) 
@@ -101,13 +95,14 @@ if(isset($_POST['user_name']) && isset($_POST['password'])
                     // we can finally input everithing into a database
 
                     //First, hash the password
-                    die($password);
-                    //$password = password_hash($password, PASSWORD_BCRYPT);
+                    echo gettype($password);
+                    echo gettype($user_name);
+                    $password = password_hash($password, PASSWORD_BCRYPT);
 
                     //Query that will insert all the data into the database
-                    //$insert_user_password_email_query = "INSERT INTO users (user_name, password, email) VALUES ('$user_name', '$password', '$email')";
+                    $insert_user_password_email_query = "INSERT INTO users (user_name, password, email) VALUES ('$user_name', '$password', '$email')";
 
-                    //$insertion_result = $connection->query($insert_user_password_email_query);
+                    $insertion_result = $connection->query($insert_user_password_email_query);
                     //Run the query
                     if($insertion_result)
                     {
@@ -129,6 +124,9 @@ if(isset($_POST['user_name']) && isset($_POST['password'])
            }
         }
     }
+}
+else{
+    echo "Fields are empty";
 }
 
 ?>
@@ -157,7 +155,10 @@ if(isset($_POST['user_name']) && isset($_POST['password'])
         <input required name="email" type="email" placeholder="Type your email here...">
 
         <br>
-        <button type="submit">Log in</button>
+        <a href="/chatting-app/login.php">Already have an account ? Click here</a>
+        <br>
+
+        <button type="submit">Sign up</button>
     </form>
 </body>
 </html>
