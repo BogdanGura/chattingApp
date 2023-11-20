@@ -1,9 +1,9 @@
 <?php
 
-define('DB_SERVER', 'mysql.cvcc-bpa.com');
-define('DB_USERNAME', 'cvccsqladmin');
-define('DB_PASSWORD', 'Cvcc$ql@dmin');
-define('DB_NAME', 'cvccmysqldb');
+define('DB_SERVER', 'localhost');
+define('DB_USERNAME', 'root');
+define('DB_PASSWORD', '');
+define('DB_NAME', 'chatting-app');
 
 $db_link = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
 

@@ -118,7 +118,7 @@ if(isset($_POST['user_name']) && isset($_POST['password'])
                         //After data insertion,close the connection then redirect the user to the login.php page
                         $connection->close();
 
-                        header("Location: login.php");
+                        header("Location: chattingApp/chatting-app/login.php");
                     }
                     else{
                         echo "Insertion Query failed: " . $connection->error;
