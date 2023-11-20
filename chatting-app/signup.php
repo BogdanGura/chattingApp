@@ -53,10 +53,11 @@ if(isset($_POST['user_name']) && isset($_POST['password'])
         //connect to a database and check if the user_name already
         // exists
 
-        $server = "mysql.cvcc-bpa.com"; 
-        $username = "cvccsqladmin"; 
-        $passwordDB = "Cvcc\$ql@dmin"; 
-        $database = "cvccmysqldb";
+        
+        $server = "localhost"; 
+        $username = "root"; 
+        $passwordDB = ""; 
+        $database = "chatting_app";
 
         // Create a connection
         $connection = new mysqli($server, $username, $passwordDB, $database);

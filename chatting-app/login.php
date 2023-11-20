@@ -91,11 +91,11 @@ if(isset($_POST['user_name']) && isset($_POST['password']))
         <input required name="password" placeholder="Type your password here...">
 
         <br>
-        <a href="/chatting-app/signup.php">Don't have an account ? Click here to register</a>
+        <a href="chattingApp/chatting-app/signup.php">Don't have an account ? Click here to register</a>
         <br>
 
         <br>
-        <a href="/chatting-app/forgot-password.php">Forgot your password ? Click here</a>
+        <a href="chattingApp/chatting-app/forgot-password.php">Forgot your password ? Click here</a>
         <br>
         
         <button type="submit">Log in</button>
