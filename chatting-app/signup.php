@@ -54,18 +54,12 @@ if(isset($_POST['user_name']) && isset($_POST['password'])
         // exists
 
         
-        $server = "localhost"; 
-        $username = "root"; 
-        $passwordDB = ""; 
-        $database = "chatting_app";
-
-        // Create a connection
-        $connection = new mysqli($server, $username, $passwordDB, $database);
+        require_once "config.php";
 
         // Check if the connection was successful
-        if ($connection->connect_error) 
+        if ($db_link->connect_error) 
         {
-            die("Connection failed: " . $connection->connect_error);
+            die("Connection failed: " . $db_link->connect_error);
 
         } 
         else 
@@ -75,7 +69,7 @@ if(isset($_POST['user_name']) && isset($_POST['password'])
            $search_for_duplicates_query = "SELECT user_name FROM users WHERE user_name = '$user_name'";
 
            //run the query and harvest the result
-           $result = $connection->query($search_for_duplicates_query);
+           $result = $db_link->query($search_for_duplicates_query);
 
            //if query is executed successfully, continue checking for 
            //diplicates
@@ -110,26 +104,26 @@ if(isset($_POST['user_name']) && isset($_POST['password'])
                     //Query that will insert all the data into the database
                     $insert_user_password_email_query = "INSERT INTO users (user_name, password, email) VALUES ('$user_name', '$password_hashed', '$email')";
 
-                    $insertion_result = $connection->query($insert_user_password_email_query);
+                    $insertion_result = $db_link->query($insert_user_password_email_query);
 
                     //Run the query
                     if($insertion_result)
                     {
                         //if query went through run everithing below
                         //After data insertion,close the connection then redirect the user to the login.php page
-                        $connection->close();
+                        $db_link->close();
 
                         header("Location: chattingApp/chatting-app/login.php");
                     }
                     else{
-                        echo "Insertion Query failed: " . $connection->error;
+                        echo "Insertion Query failed: " . $db_link->error;
                     }
 
                     
                 }
            }
            else{
-                echo"Query failed to execute: " . $connection->error;
+                echo"Query failed to execute: " . $db_link->error;
            }
         }
     }
@@ -161,7 +155,7 @@ if(isset($_POST['user_name']) && isset($_POST['password'])
         <input required name="email" type="email" placeholder="Type your email here...">
 
         <br>
-        <a href="/chatting-app/login.php">Already have an account ? Click here</a>
+        <a href="\chattingApp\chatting-app\login.php">Already have an account ? Click here</a>
         <br>
 
         <button type="submit">Sign up</button>
